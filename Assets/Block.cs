@@ -9,7 +9,7 @@ public class Block : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.tag == "Player")
+        if(other.tag == "Bullet")
         {
             hp -= Bullet.damage;
             if(hp <= 0)

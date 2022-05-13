@@ -35,28 +35,6 @@ public class Ball : MonoBehaviour
             SetLaunch(transform.position, x, y);
             isLaunched = true;
         }
-
-        // Prevent getting stuck
-        if (velocity == Vector3.up || velocity == Vector3.down)
-        {
-            int x = Random.Range(-1, 2);
-            while (x == 0)
-            {
-                x = Random.Range(-1, 2);
-            }
-            float y = velocity.y;
-            SetLaunch(transform.position, x, y);
-        }
-        if (velocity == Vector3.left || velocity == Vector3.right)
-        {
-            float x = velocity.x;
-            int y = Random.Range(-1, 2);
-            while (y == 0)
-            {
-                y = Random.Range(-1, 2);
-            }
-            SetLaunch(transform.position, x, y);
-        }
     }
 
     private void FixedUpdate()
@@ -85,6 +63,24 @@ public class Ball : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         var hit = collision.GetContact(0);
+
+        // Prevent getting stuck
+        if (Mathf.Approximately(Vector3.Dot(velocity, hit.normal), -1f))
+        {
+            float x = Random.Range(-0.25f, 0.25f);
+            while (x == 0)
+            {
+                x = Random.Range(-0.25f, 0.25f);
+            }
+            float y = Random.Range(-0.25f, 0.25f);
+            while (y == 0)
+            {
+                y = Random.Range(-0.25f, 0.25f);
+            }
+            velocity += new Vector3(x, y, 0f);
+            velocity = velocity.normalized;
+        }
+
         velocity = Vector3.Reflect(velocity, hit.normal);
     }
 }
